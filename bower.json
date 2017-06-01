@@ -1,0 +1,17 @@
+{
+  "name": "crud_ejs",
+  "description": "a Sails application",
+  "main": "app.js",
+  "authors": [
+    "himanshu"
+  ],
+  "license": "MIT",
+  "homepage": "",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ]
+}
