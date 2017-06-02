@@ -16,10 +16,39 @@ var signinform = function(req,res){
 	 res.render('register',{title:'Let\'s Register',register:registersucess});
 }
 
-var logout = (req,res) =>{
-	req.session.destroy();
-	return res.redirect('/');
-}
+var logout = (req,res,next) =>{
+	console.log('I M Logout');
+	Login.findOne(req.session.user.id,(err,userdet)=>{
+
+		if(err) return next(err);
+	if(!userdet) {
+				noAcc = {name:'NoAccountExists'};
+				req.session.flash = {
+					err:noAcc,
+				}
+			return	res.redirect('/');
+
+	}
+
+	userId = req.session.user.id;
+
+	Login.update(userId,{'online':0},function ee(err){
+			console.log('Entring log');
+		if(err) return next(err);
+
+		req.session.destroy();
+
+		return res.redirect('/');
+
+	});
+
+
+	});
+
+
+};
+
+
 
 //Register User in DB
 var registeruser = (req,res,next) => {
@@ -36,14 +65,16 @@ var registeruser = (req,res,next) => {
 					};
 
 				}else{
-				req.session.flash = {success:'Successfully Registered!'};
+				req.session.flash = {success:'Successfully Registered!'}; //if we go on login page
 
 				}
 				req.session.authenticated = true;
 				req.session.user = login;
-				//res.redirect('/signin');
-				res.redirect('/user/'+login.id)
-		// res.json(login);
+				req.session.user.online = true;
+
+				//res.redirect('/signin'); --to go to login page after register
+				res.redirect('/user/'+login.id); //showing profile page to user
+				// res.json(login);
 
 		});
 
@@ -66,11 +97,13 @@ var loginuser = (req,res) => {
 
 			Login.findOneByEmail(req.param('email'),(err,userdet)=>{
 				if(err) return next(err);
-					if(!userdet) {
+
+				if(!userdet) {
 						noAcc = {name:'NoAccountExists'};
 						req.session.flash = {
 							err:noAcc,
-						}
+					}
+
 					res.redirect('/');
 					return;
 				}
@@ -89,9 +122,12 @@ var loginuser = (req,res) => {
 
 						req.session.authenticated = true;
 						req.session.user = userdet;
-
-						res.redirect('/user/'+userdet.id);
-
+						req.session.user.online = true;
+						userdet.online = 1;
+						userdet.save((err,log)=>{
+							if(err) return next(err);
+							res.redirect('/user/'+userdet.id);
+						});
 
 				});
 

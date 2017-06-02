@@ -11,12 +11,20 @@
 <% if(userinfo.length){
 %>
 		<table class="table table-striped  table-condensed">
-  <tr><th> ID</th><th> Name</th> <th>Email</th><th>Contact</th><th>Status</th><th colspan="3">Actions</th></tr>
+  <tr><th></th><th> ID</th><th> Name</th> <th>Email</th><th>Contact</th><th>Status</th><th colspan="3">Actions</th></tr>
 
 <% userinfo.forEach((users) =>{ %>
 
 
 		    				<tr>
+
+									<% if(users.online){  %>
+
+								<td><img src='images/online.png' width=20  title='Online' > </td>
+								<% }else{ %>
+									<td><img src='/images/offline.png' width=20 title='offline' > </td>
+								<%  } %>
+
                     	<td> <%= users.id  %> </td>
 			    				    <td> <%= users.firstname  %>    <%= users.lastname  %> </td>
 
@@ -24,7 +32,7 @@
 
                       <td> <%= users.contact  %> </td>
 												<% if(users.admin){  %>
-												 %>
+												 
                       <td><img src='images/admin.png' width=50  title='Admin' > </td>
 											<% }else{ %>
 												<td><img src='/images/people.png' width=50 title='people' > </td>

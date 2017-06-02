@@ -33,6 +33,7 @@ module.exports.policies = {
    'allUsers':'admin',
    'delUserById':'useraccess',
    'updateUser':'useraccess',
+   'logout':'useraccess',
 
  }
 

@@ -49,29 +49,32 @@ module.exports = {
       }
 
   },
-  beforeCreate(values,next){ //encrypting password
+  beforeCreate(values,next){ //encrypting password while creation
 
       require('bcrypt').hash(values.password,10,(err,password)=>{
         if(err) return next(err);
-
+        console.log(password);
         values.password = password;
         next();
       });
   },
-  beforeValidation(values,next){ //encrypting password
-      if(typeof values.admin === 'undefined'){ return;}
+  beforeValidation(values,next){ //Checking the Admin or not and assiging value as per that
+      if(typeof values.admin === 'undefined'){ return next();}
       if(values.admin === 'unchecked'){ values.admin = 0; }
       else if(values.admin === true){ values.admin = 1; }
 
         next();
 
   },
-  beforeUpdate(values,next){ //encrypting password
-      if(!values.password){ return;}
+  beforeUpdate(values,next){ //encrypting password while Updating
+
+      if(!values.password){ return next();}
+
       require('bcrypt').hash(values.password,10,(err,password)=>{
         if(err) return next(err);
 
         values.password = password;
+
         next();
       });
   },
