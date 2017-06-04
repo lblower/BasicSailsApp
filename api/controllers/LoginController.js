@@ -55,7 +55,17 @@ var registeruser = (req,res,next) => {
 
 	if(req.method == "POST"){
 
-	Login.create(req.params.all(),(err,login)=>{
+var userData {
+	firstname:req.params('firstname'),
+	lastname:req.params('lastname'),
+	email:req.params('email'),
+	contact:req.params('contact'),
+	admin:req.params('admin') // remove this feild from register Form and From Inside only Deafult Admin can make and remove admins
+	}
+
+
+
+	Login.create(userData,(err,login)=>{
 
 			if(err) {
 					//console.log(err);
