@@ -9,6 +9,10 @@
  * http://sailsjs.org/#!/documentation/reference/sails.config/sails.config.http.html
  */
 
+var passportInit =  require('passport').initialize(),
+    passprtSession = require('passport').session();
+
+
 module.exports.http = {
 
   /****************************************************************************
@@ -21,6 +25,10 @@ module.exports.http = {
   *                                                                           *
   ****************************************************************************/
 
+      passportInit: require('passport').initialize(),
+      passprtSession: require('passport').session(),
+
+
   middleware: {
 
   /***************************************************************************
@@ -30,23 +38,25 @@ module.exports.http = {
   *                                                                          *
   ***************************************************************************/
 
-    // order: [
-    //   'startRequestTimer',
-    //   'cookieParser',
-    //   'session',
-    //   'myRequestLogger',
-    //   'bodyParser',
-    //   'handleBodyParserError',
-    //   'compress',
-    //   'methodOverride',
-    //   'poweredBy',
-    //   '$custom',
-    //   'router',
-    //   'www',
-    //   'favicon',
-    //   '404',
-    //   '500'
-    // ],
+    order: [
+      'startRequestTimer',
+      'cookieParser',
+      'session',
+      //'myRequestLogger',
+      'passportInit',
+        'passportSession',
+      'bodyParser',
+      'handleBodyParserError',
+      'compress',
+      'methodOverride',
+      'poweredBy',
+      '$custom',
+      'router',
+      'www',
+      'favicon',
+      '404',
+      '500'
+    ],
 
   /****************************************************************************
   *                                                                           *

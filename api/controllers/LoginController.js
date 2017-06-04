@@ -6,6 +6,8 @@
  */
 //var logindata = require('../models/login');
 
+var passport = require('passport'); //using passport Auth
+
 var registersucess = null;
 var loginform = function(req,res) {
 	//console.log(req.session);
@@ -105,43 +107,76 @@ var loginuser = (req,res) => {
 					return;
 			}
 
-			Login.findOneByEmail(req.param('email'),(err,userdet)=>{
-				if(err) return next(err);
 
-				if(!userdet) {
-						noAcc = {name:'NoAccountExists'};
-						req.session.flash = {
-							err:noAcc,
-					}
+passport.authenticate('local', function (err, user, info) {
 
-					res.redirect('/');
-					return;
-				}
+		if ((err) || (!user)) {
+			// res.status(403);
+			// return res.send({ message: info.message });
 
-				require('bcrypt').compare(req.param('password'),userdet.password,(err,valid)=>{
-						if(err) return next(err);
+									noAcc = {name:info.message};
+									req.session.flash = {
+										err:noAcc,
+								}
 
-						if(!valid) {
-							noAcc = {name:'UserName/password Does not match'};
-							req.session.flash = {
-								err:noAcc,
-							}
-						res.redirect('/');
-						return;
-						}
+													res.redirect('/');
+													return;
+		}
 
-						req.session.authenticated = true;
-						req.session.user = userdet;
+		console.log("---------------H---------");
+		console.log(user);
+		console.log("---------------H---------");
+
+		req.session.authenticated = true;
+		req.session.user = user;
 						req.session.user.online = true;
-						userdet.online = 1;
-						userdet.save((err,log)=>{
-							if(err) return next(err);
-							res.redirect('/user/'+userdet.id);
+						user.online = 1;
+						user.save((err,log)=>{
+						if(err) return next(err);
+							res.redirect('/user/'+user.id);
 						});
 
-				});
+		//return 	res.redirect('/user/'+user.id);
+})(req, res);
 
-});
+//Without Passport Strategy Login
+// 			Login.findOneByEmail(req.param('email'),(err,userdet)=>{
+// 				if(err) return next(err);
+//
+// 				if(!userdet) {
+// 						noAcc = {name:'NoAccountExists'};
+// 						req.session.flash = {
+// 							err:noAcc,
+// 					}
+//
+// 					res.redirect('/');
+// 					return;
+// 				}
+//
+// 				require('bcrypt').compare(req.param('password'),userdet.password,(err,valid)=>{
+// 						if(err) return next(err);
+//
+// 						if(!valid) {
+// 							noAcc = {name:'UserName/password Does not match'};
+// 							req.session.flash = {
+// 								err:noAcc,
+// 							}
+// 						res.redirect('/');
+// 						return;
+// 						}
+//
+// 						req.session.authenticated = true;
+// 						req.session.user = userdet;
+// 						req.session.user.online = true;
+// 						userdet.online = 1;
+// 						userdet.save((err,log)=>{
+// 							if(err) return next(err);
+// 							res.redirect('/user/'+userdet.id);
+// 						});
+//
+// 				});
+//
+// });
 
 };
 
