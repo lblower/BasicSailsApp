@@ -12,3 +12,6 @@ https://www.youtube.com/watch?v=v-Q-Hp9nBwM&index=23&list=PLf8i4fc0zJBzLhOe6FwHp
 2.bower install (for bower modules ) if you don't have bower , Use npm install bower --g
 
 3. Update config/Connection.js As, per your Mysql Credentials.
+
+--------------------------------------------------------
+Passport Local Strategy in  passport_auth branch
