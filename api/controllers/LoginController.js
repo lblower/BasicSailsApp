@@ -56,18 +56,20 @@ var registeruser = (req,res,next) => {
 	if(req.method == "POST"){
 
 var userData = {
-	firstname:req.params('firstname'),
-	lastname:req.params('lastname'),
-	email:req.params('email'),
-	contact:req.params('contact'),
-	admin:req.params('admin') // remove this feild from register Form and From Inside only Deafult Admin can make and remove admins
+	firstname:req.param('firstname'),
+	lastname:req.param('lastname'),
+	email:req.param('email'),
+	contact:req.param('contact'),
+	password:req.param('password'),
+	admin:req.param('admin') // remove this feild from register Form and From Inside only Deafult Admin can make and remove admins
 };
 
 
+console.log(userData);
 
 	Login.create(userData,(err,login)=>{
 
-			if(err) {
+			if(err && !login) {
 					//console.log(err);
 
 					req.session.flash = {
@@ -78,6 +80,7 @@ var userData = {
 				req.session.flash = {success:'Successfully Registered!'}; //if we go on login page
 
 				}
+				console.log(login);
 				req.session.authenticated = true;
 				req.session.user = login;
 				req.session.user.online = true;
